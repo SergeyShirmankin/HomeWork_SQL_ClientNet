@@ -3,6 +3,7 @@
 #include <iostream>
 #include "Client.h"
 #include "ClientNet.h"
+#include "file.h"
 #pragma warning (disable:4996)
 SOCKET Connection;
 //----------------------------------------------------------------------------------
@@ -21,6 +22,7 @@ void ClientHandler()
  void mainClientNet()
 {
 	//WSAStartup
+	 std::string Message;
 	WSAData wsaData;
 	WORD DLLVersion = MAKEWORD(2, 1);
 	if (WSAStartup(DLLVersion, &wsaData) != 0)
@@ -46,9 +48,12 @@ void ClientHandler()
 	char msg1[256];
 	while (true)
 	{
-	//	std::cin.getline(msg1, sizeof(msg1));
-	//	send(Connection, msg1, sizeof(msg1), NULL);
-		Sleep(10);
+		if (readFile(Message))
+		{
+			strcpy(msg1, Message.c_str());
+			send(Connection, msg1, sizeof(msg1), NULL);
+		}
+	   Sleep(10);
 	}
 	system("pause");
 }

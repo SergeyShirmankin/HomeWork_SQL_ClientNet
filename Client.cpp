@@ -4,11 +4,12 @@
 #include <cstring>
 #include "Client.h"
 #include "prepMess.h"
+#include "file.h"
 
 #pragma warning(disable : 4996)
 #define DEBUG_STEP_1
 #define DEBUG_STEP_2
-#define DEBUG_STEP_3
+//#define DEBUG_STEP_3
 
 char buffer[MESSAGE_BUFFER] ="Нет ответа от сервера !!!!";
 char message[MESSAGE_BUFFER] = "not message";
@@ -19,11 +20,6 @@ Log_pass  objLogPass;
 std::string tempStateProgram;
 
 
-//#ifdef DEBUG
-//#else
-//#endif
-
-//----------------------------------------------------------------------
 //----------------------------------------------------------------------
 std::string  recivMess(char arryChar[]) //формирование сообщения для полученная с сервера 
 {
@@ -65,7 +61,7 @@ void sendRequest()
 			else if (tempMessage.compare("log ") == 0)
 			{
 				tempMessage = objPrevMess.InterfaceLogPass(objPrevMess.managerInterLogPass);//Создаесм стартовое окно для создания логина и пароля или авторизация на сервере
-				strcpy(message, tempMessage.c_str());//преооразуем строку в массив char
+				//strcpy(message, tempMessage.c_str());//преооразуем строку в массив char
 			}
 			else if (tempMessage.compare("enter ") == 0)
 			{
@@ -113,42 +109,43 @@ void sendRequest()
 #endif
 			//--------------------------------------------------------------------------------------------------------------------------
 			//--------------------------------------------------------------------------------------------------------------------------
-			//--------------------------------------------------------------------------------------------------------------------------
+			//--------------------------------------------------------------------------------------------------------------------------	    
+			// отправляем сообщение потоку через файл 
+	        if ( createFile(tempMessage))
+				std::cout << "Сообщение успешно было потоку :  " <<std::endl;
+			else 
+				std::cout << "Сообщение не было отправленно потоку :  " << std::endl;
+			
 
 
 
-		//	std::cout << "Сообщение успешно было отправленно на сервер:  " << message << std::endl;
-		//	std::cout << "Дождитесь ответа от сервера ..." << std::endl;
+			objLogPass.parserMessage(buffer);
 
-		//	//std::cout << "Сообщение полученно от сервера " << std::endl;
 
-		//	objLogPass.parserMessage(buffer);
-		//	//std::cout << "Сообщение полученно от сервера " << std::endl;
-
-		//	tempStateProgram = objLogPass.get_CurrentState();
-		//	std::string  tempRequestProgram = objLogPass.get_Request();
-		//	if (tempStateProgram.compare("3") == 0)// успешное создание лога и пароля
-		//	{
-		//		std::cout << "\n>> Сообщение полученно от сервера\n ";
-		//		std::cout << ">> Успешное создание лога и павроля!!!\n";
-		//	}
-		//	else if (tempStateProgram.compare("4") == 0)//Не удалось создать  лог ипароль
-		//	{
-		//		std::cout << "\n>> Сообщение полученно от сервера\n ";
-		//		std::cout << ">> Не удалось создать логин ипароль!!!\n ";
-		//	}
-		//	else if (tempStateProgram.compare("5") == 0)//Такой логин и пароль уже есть
-		//	{
-		//		std::cout << "\n>> Сообщение полученно от сервера \n";
-		//		std::cout << ">> Такой пароль уже есть!!!\n";
-		//	}
-		//	else if (tempStateProgram.compare("7") == 0 && tempRequestProgram.compare("6") == 0)//успешная авторизация
-		//	{
-		//		std::cout << "\n>> Сообщение полученно от сервера \n";
-		//		std::cout << ">> Успешное авторизация!!!!\n";
-		//		autorization = true;
-		//		//             objLogPass.set_CurrentState("--");
-		//	}
+			tempStateProgram = objLogPass.get_CurrentState();
+			std::string  tempRequestProgram = objLogPass.get_Request();
+			if (tempStateProgram.compare("3") == 0)// успешное создание лога и пароля
+			{
+				std::cout << "\n>> Сообщение полученно от сервера\n ";
+				std::cout << ">> Успешное создание лога и павроля!!!\n";
+			}
+			else if (tempStateProgram.compare("4") == 0)//Не удалось создать  лог ипароль
+			{
+				std::cout << "\n>> Сообщение полученно от сервера\n ";
+				std::cout << ">> Не удалось создать логин ипароль!!!\n ";
+			}
+			else if (tempStateProgram.compare("5") == 0)//Такой логин и пароль уже есть
+			{
+				std::cout << "\n>> Сообщение полученно от сервера \n";
+				std::cout << ">> Такой пароль уже есть!!!\n";
+			}
+			else if (tempStateProgram.compare("7") == 0 && tempRequestProgram.compare("6") == 0)//успешная авторизация
+			{
+				std::cout << "\n>> Сообщение полученно от сервера \n";
+				std::cout << ">> Успешное авторизация!!!!\n";
+				autorization = true;
+				//             objLogPass.set_CurrentState("--");
+			}
 
 
 #ifdef  DEBUG_STEP_2
@@ -163,18 +160,18 @@ void sendRequest()
 
 		}
 #endif
-		//	else if (tempStateProgram.compare("8") == 0)//Нету доступа
-		//	{
-		//		std::cout << "\n>> Сообщение полученно от сервера \n";
-		//		std::cout << ">> Нету доступа!!!\n";
-		//	}
-		//	else
-		//	{
-		//		std::cout << "Сервер не отвечает " << std::endl;;
-		//	}
-		//}
-		// закрываем сокет, завершаем соединение
+			else if (tempStateProgram.compare("8") == 0)//Нету доступа
+			{
+				std::cout << "\n>> Сообщение полученно от сервера \n";
+				std::cout << ">> Нету доступа!!!\n";
+			}
+			else
+			{
+				std::cout << "Сервер не отвечает " << std::endl;;
+			}
+		}
+		
 	}
-}
+
 
 
