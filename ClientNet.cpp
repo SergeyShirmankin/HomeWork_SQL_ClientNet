@@ -10,11 +10,23 @@ SOCKET Connection;
 //-----------------------------------------------------
 void ClientHandler()
 {
-	char msg[256];
+	bool onlyOnes = false;
+	char msg[MESSAGE_BUFFER];
 	while (true)
 	{
-		recv(Connection, msg, sizeof(msg), NULL);
-		//std::cout << msg << std::endl;
+		if (!onlyOnes)//выполняется только в первый проход
+		{
+			recv(Connection, msg, sizeof(msg), NULL);
+			std::cout << msg << std::endl;
+			sendRequest();
+			onlyOnes = true;
+		}
+		else
+		{
+			recv(Connection, msg, sizeof(msg), NULL);
+			reciveStateProgram(msg);
+			sendRequest();
+		}
 	}
 }
 //----------------------------------------------------------------------------------
@@ -44,7 +56,7 @@ void ClientHandler()
 	}
 	std::cout << "Connected!\n";
 	CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)ClientHandler, NULL, NULL, NULL);
-	CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)sendRequest, NULL, NULL, NULL);
+	//CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)sendRequest, NULL, NULL, NULL);
 	char msg1[256];
 	while (true)
 	{
