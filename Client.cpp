@@ -75,8 +75,7 @@ void sendRequest()
 			else if (tempMessage.compare("enter ") == 0)
 			{
 				tempMessage = objPrevMess.enterLogPass(objLogPass.get_StateProgram());//Авторизация под логинои и паролем
-				strcpy(message, tempMessage.c_str());
-				objLogPass.parserMessage(message);
+				msgTofile(tempMessage);
 				return;
 			}
 		}
