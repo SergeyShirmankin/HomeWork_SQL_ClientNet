@@ -50,34 +50,41 @@ void sendRequest()
 	bool autorization = false;//переменная для авторизацииж
 
 	PrevMess objPrevMess;
-	bool breakCicle = false;
-	//while (1)
-	
+	bool breakCicle = false;	
 		if (autorization == false)
-		{
-			std::cout << "Для завершения работы наберите  --end--   или  --log--  для создание логина и пароля  --enter-- авторизации на сервере " << std::endl;
-			std::cout << ">>" << std::endl;
-			std::getline(std::cin >> tempCin, tempMessage);//забираем всю строку
-			tempMessage = tempCin + " " + tempMessage;
-			strcpy(message, tempMessage.c_str());//преооразуем строку в массив char
-			if (tempMessage.compare("end ") == 0)
-			{
-				std::cout << "Закрываем соединение" << std::endl;
-				exit(0);
-			}
-			else if (tempMessage.compare("log ") == 0)
-			{
-				tempMessage = objPrevMess.InterfaceLogPass(objPrevMess.managerInterLogPass);//Создаесм стартовое окно для создания логина и пароля или авторизация на сервере
-				msgTofile(tempMessage);
-				//strcpy(message, tempMessage.c_str());//преооразуем строку в массив char
-				return;
-			}
-			else if (tempMessage.compare("enter ") == 0)
-			{
-				tempMessage = objPrevMess.enterLogPass(objLogPass.get_StateProgram());//Авторизация под логинои и паролем
-				msgTofile(tempMessage);
-				return;
-			}
+			while(true)
+			{ 
+				{
+					std::cout << "Для завершения работы наберите  --end--   или  --log--  для создание логина и пароля  --enter-- авторизации на сервере " << std::endl;
+					std::cout << ">>" << std::endl;
+					std::getline(std::cin >> tempCin, tempMessage);//забираем всю строку
+					tempMessage = tempCin + " " + tempMessage;
+					strcpy(message, tempMessage.c_str());//преооразуем строку в массив char
+					if (tempMessage.size() != 0)
+					{
+						if (tempMessage.compare("end ") == 0 || tempMessage.compare("log ") == 0 || tempMessage.compare("enter ") == 0)
+						{
+							if (tempMessage.compare("end ") == 0)
+							{
+								std::cout << "Закрываем соединение" << std::endl;
+								exit(0);
+							}
+							else if (tempMessage.compare("log ") == 0)
+							{
+								tempMessage = objPrevMess.InterfaceLogPass(objPrevMess.managerInterLogPass);//Создаесм стартовое окно для создания логина и пароля или авторизация на сервере
+								msgTofile(tempMessage);
+								//strcpy(message, tempMessage.c_str());//преооразуем строку в массив char
+								return;
+							}
+							else if (tempMessage.compare("enter ") == 0)
+							{
+								tempMessage = objPrevMess.enterLogPass(objLogPass.get_StateProgram());//Авторизация под логинои и паролем
+								msgTofile(tempMessage);
+								return;
+							}
+						}
+					}
+				}
 		}
 
 			else

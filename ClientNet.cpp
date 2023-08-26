@@ -60,6 +60,7 @@ void ClientHandler()
 	char msg1[256];
 	while (true)
 	{
+		Message = "";
 		if (readFile(Message))
 		{
 			strcpy(msg1, Message.c_str());
