@@ -20,27 +20,7 @@ Log_pass  objLogPass;
 std::string tempStateProgram;
 bool autorization = false;//переменна€ дл€ авторизацииж
 //-------------------------------------------------------------------
-std::string msgForServer()
-{
-	std::string tempStr = "*";//---знак начала сообщени€
-	tempStr = tempStr + objLogPass.get_PasswordUser();//--пароль 
-	tempStr = tempStr + ":";
-	tempStr = tempStr + objLogPass.get_NameUserSend();//--логин отправител€  сообщени€
-	tempStr = tempStr + ":";
-	tempStr = tempStr + objLogPass.get_NameUserRecive();//--логин получател€ сообщени€
-	tempStr = tempStr + ":";
-	tempStr = tempStr + objLogPass.get_Request();//--запрос на действи€ сервера
-	tempStr = tempStr + ":";
-	tempStr = tempStr + objLogPass.get_CurrentState();//--- состо€ние сервера
-	tempStr = tempStr + ":";
-	tempStr = tempStr + objLogPass.get_NumCurrMess();//--номер сообщени€ 
-	tempStr = tempStr + ":";
-	tempStr = tempStr + objLogPass.get_NumMess();//--количество сообщений
-	tempStr = tempStr + ":";
-	tempStr = tempStr + objLogPass.get_Messaqge();//--само сообщение
-	tempStr = tempStr + "&";
-	return tempStr;
-}
+
 //----------------------------------------------------------------------
 			// отправл€ем сообщение потоку через файл 
 void msgTofile(std::string tmpMsg)
@@ -116,51 +96,25 @@ void sendRequest()
 			int countUsers = -1;
 			while (autorization == true)
 			{
-				// breakCicle=false;
+
 				std::cout << "\nƒл€ выхода нажмите клавишу 'e' дл€ продолжени€ нажмите любую кл и ent";
 				std::cout << "\n>> ";
 				std::getline(std::cin >> tempCin, tempMessage);//забираем всю строку
 				tempMessage = tempCin + " " + tempMessage;
 				if (tempMessage.compare("e ") == 0)// ¬нимание не рабочий пример
 				{
-					// tempMessage = msgForServer();
-					//	msgTofile(tempMessage);
-					 ////tempMessage = "*--:--:--:--:--:--:--:--&";//‘ормируем пустое сообщение
-					 //strcpy(message, tempMessage.c_str());//преооразуем строку в массив char
 					autorization = false;
-					//objLogPass.set_CurrentState("7");
-					//break;
 				}
 				else
 				{
 					system("cls");
+					std::string Msg = "*--:"+objLogPass.get_NameUserSend()+":--:9:"+ objLogPass.get_CurrentState() +":1:1--&"; //9 запрос околичестве пользователей
+					msgTofile(Msg);
 					std::cout << "Online users: ";
-
-					/*				 for (auto it = _log_pass.begin(); it != _log_pass.end(); ++it)
-									 {
-										 countUsers++;
-										 cout << it->first << "[" << countUsers << "], ";
-									 }
-									 cout << endl;
-									 std::cout << "\nStart Session[" << curSesion << "]:\n";
-									 std::cout << "Hello " << currUser << "\n";*/
-									 //std::string resultStr = "*--:--:--:9:--:1:1:--&";
-									 //strcpy(message, resultStr.c_str());//преооразуем строку в массив char
-									 //std::cout << "—ообщение успешно было отправленно на сервер:  " << std::endl;
-									 //std::cout << "ƒождитесь ответа от сервера ..." << std::endl;
 				}
 			}
 
 		}
-		// const std::string tempCurrState = "100";
-		//if ((tempStateProgram.compare("7") == 0)&& autorization == false)//успешна€ авторизаци€
-		//{
-		//	std::cout << "\n>> —ообщение полученно от сервера \n";
-		//	std::cout << ">> ”спешное авторизаци€!!!!\n";
-		//	autorization = true;
-		//	objLogPass.set_CurrentState(tempCurrState);
-
-		//}
 	}
 }
 //-----------------------------------------------------------------------------------------
