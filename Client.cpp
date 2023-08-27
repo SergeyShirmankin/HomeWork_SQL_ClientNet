@@ -18,7 +18,29 @@ std::string tempCin;
 std::string tempMessage;
 Log_pass  objLogPass;
 std::string tempStateProgram;
-
+bool autorization = false;//переменная для авторизацииж
+//-------------------------------------------------------------------
+std::string msgForServer()
+{
+	std::string tempStr = "*";//---знак начала сообщения
+	tempStr = tempStr + objLogPass.get_PasswordUser();//--пароль 
+	tempStr = tempStr + ":";
+	tempStr = tempStr + objLogPass.get_NameUserSend();//--логин отправителя  сообщения
+	tempStr = tempStr + ":";
+	tempStr = tempStr + objLogPass.get_NameUserRecive();//--логин получателя сообщения
+	tempStr = tempStr + ":";
+	tempStr = tempStr + objLogPass.get_Request();//--запрос на действия сервера
+	tempStr = tempStr + ":";
+	tempStr = tempStr + objLogPass.get_CurrentState();//--- состояние сервера
+	tempStr = tempStr + ":";
+	tempStr = tempStr + objLogPass.get_NumCurrMess();//--номер сообщения 
+	tempStr = tempStr + ":";
+	tempStr = tempStr + objLogPass.get_NumMess();//--количество сообщений
+	tempStr = tempStr + ":";
+	tempStr = tempStr + objLogPass.get_Messaqge();//--само сообщение
+	tempStr = tempStr + "&";
+	return tempStr;
+}
 //----------------------------------------------------------------------
 			// отправляем сообщение потоку через файл 
 void msgTofile(std::string tmpMsg)
@@ -45,89 +67,102 @@ std::string  recivMess(char arryChar[]) //формирование сообщения для полученная 
 
 }
 //-----------------------------------------------------------------------------------
-void sendRequest() 
+void sendRequest()
 {
-	bool autorization = false;//переменная для авторизацииж
-
 	PrevMess objPrevMess;
-	bool breakCicle = false;	
+	bool breakCicle = false;
+	while (true)
+	{
 		if (autorization == false)
-			while(true)
-			{ 
+		{
+			std::cout << "Для завершения работы наберите  --end--   или  --log--  для создание логина и пароля  --enter-- авторизации на сервере " << std::endl;
+			std::cout << ">>" << std::endl;
+			std::getline(std::cin >> tempCin, tempMessage);//забираем всю строку
+			tempMessage = tempCin + " " + tempMessage;
+			strcpy(message, tempMessage.c_str());//преооразуем строку в массив char
+			if (tempMessage.size() != 0)
+			{
+				if (tempMessage.compare("end ") == 0 || tempMessage.compare("log ") == 0 || tempMessage.compare("enter ") == 0)
 				{
-					std::cout << "Для завершения работы наберите  --end--   или  --log--  для создание логина и пароля  --enter-- авторизации на сервере " << std::endl;
-					std::cout << ">>" << std::endl;
-					std::getline(std::cin >> tempCin, tempMessage);//забираем всю строку
-					tempMessage = tempCin + " " + tempMessage;
-					strcpy(message, tempMessage.c_str());//преооразуем строку в массив char
-					if (tempMessage.size() != 0)
+					if (tempMessage.compare("end ") == 0)
 					{
-						if (tempMessage.compare("end ") == 0 || tempMessage.compare("log ") == 0 || tempMessage.compare("enter ") == 0)
-						{
-							if (tempMessage.compare("end ") == 0)
-							{
-								std::cout << "Закрываем соединение" << std::endl;
-								exit(0);
-							}
-							else if (tempMessage.compare("log ") == 0)
-							{
-								tempMessage = objPrevMess.InterfaceLogPass(objPrevMess.managerInterLogPass);//Создаесм стартовое окно для создания логина и пароля или авторизация на сервере
-								msgTofile(tempMessage);
-								//strcpy(message, tempMessage.c_str());//преооразуем строку в массив char
-								return;
-							}
-							else if (tempMessage.compare("enter ") == 0)
-							{
-								tempMessage = objPrevMess.enterLogPass(objLogPass.get_StateProgram());//Авторизация под логинои и паролем
-								msgTofile(tempMessage);
-								return;
-							}
-						}
+						std::cout << "Закрываем соединение" << std::endl;
+						exit(0);
+					}
+					else if (tempMessage.compare("log ") == 0)
+					{
+						tempMessage = objPrevMess.InterfaceLogPass(objPrevMess.managerInterLogPass);//Создаесм стартовое окно для создания логина и пароля или авторизация на сервере
+						msgTofile(tempMessage);
+						//strcpy(message, tempMessage.c_str());//преооразуем строку в массив char
+						return;
+					}
+					else if (tempMessage.compare("enter ") == 0)
+					{
+						tempMessage = objPrevMess.enterLogPass(objLogPass.get_StateProgram());//Авторизация под логинои и паролем
+						msgTofile(tempMessage);
+						return;
 					}
 				}
-		}
-
-			else
-				//-------------------------------------------------------------------------------------------------------------------------
-				//-----------------------------Программа работы ссобщениямми---------------------------------------------------------------
-				//-------------------------------------------------------------------------------------------------------------------------
-			{
-				char key;
-				int countUsers = -1;
-				while (autorization == true)
-				{
-					// breakCicle=false;
-					std::cout << "\nДля выхода нажмите клавишу 'e' для продолжения нажмите любую кл и ent";
-					std::cout << "\n>> ";
-					std::getline(std::cin >> tempCin, tempMessage);//забираем всю строку
-					tempMessage = tempCin + " " + tempMessage;
-		         if (tempMessage.compare("e ") == 0)// Внимание не рабочий пример
-					{
-						tempMessage = "*--:--:--:--:--:--:--:--&";//Формируем пустое сообщение
-						strcpy(message, tempMessage.c_str());//преооразуем строку в массив char
-						autorization = false;
-						break;
-					}
-					else
-					{
-						std::string resultStr = "*--:--:--:9:--:1:1:--&";
-						strcpy(message, resultStr.c_str());//преооразуем строку в массив char
-						std::cout << "Сообщение успешно было отправленно на сервер:  " << std::endl;
-						std::cout << "Дождитесь ответа от сервера ..." << std::endl;
-					}
-				}
-
-			}	    
-			 const std::string tempCurrState = "100";
-			if ((tempStateProgram.compare("7") == 0)&& autorization == false)//успешная авторизация
-			{
-				std::cout << "\n>> Сообщение полученно от сервера \n";
-				std::cout << ">> Успешное авторизация!!!!\n";
-				autorization = true;
-				objLogPass.set_CurrentState(tempCurrState);
-
 			}
 		}
+
+
+		else
+			//-------------------------------------------------------------------------------------------------------------------------
+			//-----------------------------Программа работы ссобщениямми---------------------------------------------------------------
+			//-------------------------------------------------------------------------------------------------------------------------
+		{
+			char key;
+			int countUsers = -1;
+			while (autorization == true)
+			{
+				// breakCicle=false;
+				std::cout << "\nДля выхода нажмите клавишу 'e' для продолжения нажмите любую кл и ent";
+				std::cout << "\n>> ";
+				std::getline(std::cin >> tempCin, tempMessage);//забираем всю строку
+				tempMessage = tempCin + " " + tempMessage;
+				if (tempMessage.compare("e ") == 0)// Внимание не рабочий пример
+				{
+					// tempMessage = msgForServer();
+					//	msgTofile(tempMessage);
+					 ////tempMessage = "*--:--:--:--:--:--:--:--&";//Формируем пустое сообщение
+					 //strcpy(message, tempMessage.c_str());//преооразуем строку в массив char
+					autorization = false;
+					//objLogPass.set_CurrentState("7");
+					//break;
+				}
+				else
+				{
+					system("cls");
+					std::cout << "Online users: ";
+
+					/*				 for (auto it = _log_pass.begin(); it != _log_pass.end(); ++it)
+									 {
+										 countUsers++;
+										 cout << it->first << "[" << countUsers << "], ";
+									 }
+									 cout << endl;
+									 std::cout << "\nStart Session[" << curSesion << "]:\n";
+									 std::cout << "Hello " << currUser << "\n";*/
+									 //std::string resultStr = "*--:--:--:9:--:1:1:--&";
+									 //strcpy(message, resultStr.c_str());//преооразуем строку в массив char
+									 //std::cout << "Сообщение успешно было отправленно на сервер:  " << std::endl;
+									 //std::cout << "Дождитесь ответа от сервера ..." << std::endl;
+				}
+			}
+
+		}
+		// const std::string tempCurrState = "100";
+		//if ((tempStateProgram.compare("7") == 0)&& autorization == false)//успешная авторизация
+		//{
+		//	std::cout << "\n>> Сообщение полученно от сервера \n";
+		//	std::cout << ">> Успешное авторизация!!!!\n";
+		//	autorization = true;
+		//	objLogPass.set_CurrentState(tempCurrState);
+
+		//}
+	}
+}
 //-----------------------------------------------------------------------------------------
 
 void reciveStateProgram(char bufferMsg [MESSAGE_BUFFER] )
@@ -153,8 +188,8 @@ void reciveStateProgram(char bufferMsg [MESSAGE_BUFFER] )
 	{
 		std::cout << "\n>> Сообщение полученно от сервера \n";
 		std::cout << ">> Успешное авторизация!!!!\n";
-		//autorization = true;
-		//             objLogPass.set_CurrentState("--");
+		autorization = true; 
+		objLogPass.set_CurrentState("13");
 	}
 
 	else if (tmpStateProgram.compare("8") == 0)//Нету доступа
