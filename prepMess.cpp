@@ -26,7 +26,6 @@ PrevMess::PrevMess()//конструктор по умолчанию
 	{
 			std::string tempStr;
 			std::string tempOP;
-		//	char* op;//запись символа операции
 		//----------------------------------------------------------------------
 			if (StartFunction)
 			{
@@ -36,19 +35,9 @@ PrevMess::PrevMess()//конструктор по умолчанию
 				std::cout << ">> ";
 				std::cin >> tempOP;
 				if (tempOP.size()!= 0)
-				//{
-				//	std::vector<char>chars(tempOP.begin(), tempOP.end());//преобразователь string ->char
-				//	chars.push_back('\0');
-				//	op = &chars[0];
-				//	switch (*op)
-				//	{
-				//	case'n':
 						tempStr = addLogPass();
 						tempStr = "*" + tempStr + ":--:2:1:1:1:--&";
 						return tempStr;
-					//defalt:
-					//	std::cout << "Ќеправильно выбрали букву";
-					//}
 				}
 			}
 			//----------------------------------------------------------------------

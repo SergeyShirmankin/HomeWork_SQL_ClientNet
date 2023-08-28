@@ -7,6 +7,7 @@ class Log_pass
 {
 public:
 	Log_pass();// онструктор по умолчанию
+//	~Log_pass();//дестуктор по умолчани€
 	void parserMessage(char arrChar[]);
 	void set_PasswUser(const std::string&);
 	void set_NameUserSend(const std::string&);

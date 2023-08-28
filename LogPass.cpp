@@ -7,6 +7,10 @@ Log_pass::Log_pass()//конструктор по умолчанию
 	StateProgram = "1";
 	countObjectLogPass = 0;
 }
+//Log_pass::~Log_pass()
+//{
+//	 delete_();
+//}
 
 void Log_pass::set_StateProgram(int newStateProgram)
 {

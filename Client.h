@@ -8,3 +8,4 @@ std::string  recivMess(char arryChar[]);  //формирование сообщения для полученна
 void sendRequest();
 void reciveStateProgram(char [MESSAGE_BUFFER]);
 void msgTofile(std::string tmpMsg);
+void delete_();

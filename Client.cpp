@@ -20,7 +20,11 @@ Log_pass  objLogPass;
 std::string tempStateProgram;
 bool autorization = false;//переменна€ дл€ авторизацииж
 //-------------------------------------------------------------------
-
+void delete_()
+{
+	std::string Msg = "*--:" + objLogPass.get_NameUserSend() + ":--:14:" + objLogPass.get_CurrentState() + ":1:1--&";
+	msgTofile(Msg);
+}
 //----------------------------------------------------------------------
 			// отправл€ем сообщение потоку через файл 
 void msgTofile(std::string tmpMsg)
@@ -67,6 +71,7 @@ void sendRequest()
 					if (tempMessage.compare("end ") == 0)
 					{
 						std::cout << "«акрываем соединение" << std::endl;
+					    delete_();
 						exit(0);
 					}
 					else if (tempMessage.compare("log ") == 0)
@@ -111,6 +116,7 @@ void sendRequest()
 					std::string Msg = "*--:"+objLogPass.get_NameUserSend()+":--:9:"+ objLogPass.get_CurrentState() +":1:1--&"; //9 запрос околичестве пользователей
 					msgTofile(Msg);
 					std::cout << "Online users: ";
+					autorization = false; //выход из программы
 				}
 			}
 
