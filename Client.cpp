@@ -5,6 +5,7 @@
 #include "Client.h"
 #include "prepMess.h"
 #include "file.h"
+#include <windows.h>
 
 #pragma warning(disable : 4996)
 #define DEBUG_STEP_1
@@ -116,7 +117,9 @@ void sendRequest()
 					std::string Msg = "*--:"+objLogPass.get_NameUserSend()+":--:9:"+ objLogPass.get_CurrentState() +":1:1--&"; //9 запрос околичестве пользователей
 					msgTofile(Msg);
 					std::cout << "Online users: ";
+					Sleep(20);//остановка на 20 мили_секунд
 					autorization = false; //выход из программы
+					return;
 				}
 			}
 
@@ -156,6 +159,11 @@ void reciveStateProgram(char bufferMsg [MESSAGE_BUFFER] )
 	{
 		std::cout << "\n>> Сообщение полученно от сервера \n";
 		std::cout << ">> Нету доступа!!!\n";
+	}
+	else if (tmpStateProgram.compare("10") == 0)//Нету доступа
+	{
+		std::cout << "\n>> Сообщение полученно от сервера \n";
+		std::cout << ">> Количестово пользователей!!!\n";
 	}
 	else
 	{
